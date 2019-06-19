@@ -22,6 +22,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     data() {
       return {
@@ -29,13 +30,41 @@
       }
     },
     created() {
-
+      this.getVerifyInfo('407482127261630464');
     },
     mounted() {
     },
     methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
+      getVerifyInfo(thingcodeDetailGuid) {
+        let that = this;
+        axios({
+          url: 'http://192.168.1.37:8013/verifyRecord/getVerifyInfo',
+          method: 'post',
+          data: {},
+          transformRequest: [function () {
+            let oMyForm = new FormData();
+            oMyForm.append("guid", "335670566191104");
+            oMyForm.append("thingcodeDetailGuid", thingcodeDetailGuid);
+            return oMyForm;
+          }],
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+          .then(function (response) {
+            console.log(response);
+            console.log(response.data);
+            if (response.data.success) {
+              /*that.businessInfo = response.data.data[0];
+              that.urls = that.businessInfo.infos;*/
+            } else {
+              that.$message({message: '获取数据失败，请检查网络后重试！', type: 'erroy'});
+            }
+          })
+          .catch(function (error) {
+            that.$message({message: '获取数据失败，请检查网络后重试！', type: 'erroy'});
+            console.log(error);
+          });
       },
       goBack() {
         this.$router.go(-1);

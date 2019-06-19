@@ -9,7 +9,6 @@
         </el-form-item>
         <el-form-item class="bt">
           <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -17,6 +16,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     data() {
       return {
@@ -25,7 +25,7 @@
         },
         rules: {
           desc: [
-            {required: true, message: '请填写活动形式', trigger: 'blur'}
+            {required: true, message: '请填写您的', trigger: 'blur'}
           ]
         }
       };
@@ -36,19 +36,48 @@
     mounted() {
     },
     methods: {
+
+      feedbackForm(content) {
+        let that = this;
+        axios({
+          url: 'http://192.168.1.37:8013/verifyRecord/complaint',
+          method: 'post',
+          data: {},
+          transformRequest: [function () {
+            let oMyForm = new FormData();
+            oMyForm.append("productGuid", "420953354584195072");
+            oMyForm.append("content", content);
+            return oMyForm;
+          }],
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+          .then(function (response) {
+            console.log(response.data);
+            if (response.data.success) {
+              that.$message({message: '非常感谢您的宝贵意见，我们收到会尽快采纳！', type: 'success'});
+              that.ruleForm.desc = '';
+            } else {
+              that.$message({message: '获取数据失败，请检查网络后重试！', type: 'erroy'});
+            }
+          })
+          .catch(function (error) {
+            that.$message({message: '获取数据失败，请检查网络后重试！', type: 'erroy'});
+            console.log(error);
+          });
+      },
+
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            this.feedbackForm(this.ruleForm.desc);
           } else {
-            console.log('error submit!!');
             return false;
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
+
       goBack() {
         this.$router.go(-1);
       }
