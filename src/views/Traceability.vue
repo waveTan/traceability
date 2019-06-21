@@ -24,6 +24,7 @@
 
 <script>
   import axios from 'axios'
+  import {API_URL} from '@/config.js'
   export default {
     data() {
       return {
@@ -31,7 +32,7 @@
       }
     },
     created() {
-      this.getTraceInfo('420953354584195072','407482127261630464');
+      this.getTraceInfo(this.$route.query.productGuid,this.$route.query.thingcodeDetailGuid);
     },
     mounted() {
     },
@@ -39,7 +40,7 @@
       getTraceInfo(productGuid, thingcodeDetailGuid) {
         let that = this;
         axios({
-          url: 'http://192.168.1.37:8013/verifyRecord/getTraceInfo',
+          url: API_URL + '/verifyRecord/getTraceInfo',
           method: 'post',
           data: {},
           transformRequest: [function () {
@@ -54,12 +55,9 @@
           }
         })
           .then(function (response) {
-            console.log(response.data.data);
+            //console.log(response.data.data);
             if (response.data.success) {
               let vshowmenu = JSON.parse(response.data.data.vshowmenu);
-              console.log(vshowmenu);
-              /*that.businessInfo = response.data.data[0];
-              that.urls = that.businessInfo.infos;*/
             } else {
               that.$message({message: '获取数据失败，请检查网络后重试！', type: 'erroy'});
             }

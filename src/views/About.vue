@@ -14,7 +14,7 @@
 
 <script>
   import axios from 'axios'
-
+  import {API_URL} from '@/config.js'
   export default {
     data() {
       return {
@@ -23,7 +23,7 @@
       }
     },
     created() {
-      this.getBusinessInfos('420953354584195072', '407480862678974464');
+      this.getBusinessInfos(this.$route.query.productGuid,this.$route.query.businessGuid);
     },
     mounted() {
     },
@@ -32,7 +32,7 @@
       getBusinessInfos(productGuid, businessGuid) {
         let that = this;
         axios({
-          url: 'http://192.168.1.37:8013/verifyRecord/getBusinessInfos',
+          url: API_URL + '/verifyRecord/getBusinessInfos',
           method: 'post',
           data: {},
           transformRequest: [function () {
@@ -47,11 +47,10 @@
           }
         })
           .then(function (response) {
-            console.log(response.data.data);
+            //console.log(response.data.data);
             if (response.data.success) {
               that.businessInfo = response.data.data[0];
               that.urls = that.businessInfo.infos;
-
             } else {
               that.$message({message: '获取数据失败，请检查网络后重试！', type: 'erroy'});
             }

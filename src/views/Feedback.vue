@@ -8,7 +8,7 @@
           <el-input type="textarea" v-model="ruleForm.desc"></el-input>
         </el-form-item>
         <el-form-item class="bt">
-          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">提 交</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -17,6 +17,8 @@
 
 <script>
   import axios from 'axios'
+  import {API_URL} from '@/config.js'
+
   export default {
     data() {
       return {
@@ -39,13 +41,14 @@
 
       feedbackForm(content) {
         let that = this;
+        let productGuid = this.$route.query.productGuid;
         axios({
-          url: 'http://192.168.1.37:8013/verifyRecord/complaint',
+          url: API_URL + '/verifyRecord/complaint',
           method: 'post',
           data: {},
           transformRequest: [function () {
             let oMyForm = new FormData();
-            oMyForm.append("productGuid", "420953354584195072");
+            oMyForm.append("productGuid", productGuid);
             oMyForm.append("content", content);
             return oMyForm;
           }],
@@ -54,7 +57,7 @@
           }
         })
           .then(function (response) {
-            console.log(response.data);
+            //console.log(response.data);
             if (response.data.success) {
               that.$message({message: '非常感谢您的宝贵意见，我们收到会尽快采纳！', type: 'success'});
               that.ruleForm.desc = '';

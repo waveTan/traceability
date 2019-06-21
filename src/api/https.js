@@ -1,8 +1,8 @@
 import axios from 'axios'
-import {API_TIME, API_URL} from '@/config.js'
+import {API_TIME} from '@/config.js'
 
 axios.defaults.timeout = API_TIME;
-axios.defaults.baseURL = API_URL;
+//axios.defaults.baseURL = API_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 /**

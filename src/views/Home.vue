@@ -11,22 +11,22 @@
       </el-col>
       <el-col :span="24" class="info">
         <ul>
-          <li @click="toUrl('about')">
+          <li @click="toUrl('about',{productGuid:product.guid,businessGuid:product.businessGuid})">
             <i class="ico el-icon-office-building"></i>
             <span>企业信息</span>
             <i class="el-icon-arrow-right"></i>
           </li>
-          <li @click="toUrl('traceability')">
+          <li @click="toUrl('traceability',{productGuid:product.guid,thingcodeDetailGuid:product.businessGuid})">
             <i class="ico el-icon-set-up"></i>
             <span>溯源信息</span>
             <i class="el-icon-arrow-right"></i>
           </li>
-          <li @click="toUrl('verification')">
+          <li @click="toUrl('verification',{thingcodeDetailGuid:product.businessGuid})">
             <i class="ico el-icon-date"></i>
             <span>验证记录</span>
             <i class="el-icon-arrow-right"></i>
           </li>
-          <li @click="toUrl('feedback')">
+          <li @click="toUrl('feedback',{productGuid:product.guid})">
             <i class="ico el-icon-message"></i>
             <span>意见反馈</span>
             <i class="el-icon-arrow-right"></i>
@@ -49,27 +49,41 @@
 
 <script>
   import axios from 'axios'
+  import {API_URL} from '@/config.js'
+
   export default {
     name: 'app',
     data() {
       return {
         scanInfo: {},
-        product:'',
+        product: '',
         src: '',
-        urls: []
+        urls: [],
+        params: '',
+        thingcodeDetailGuid: '',
       }
     },
     created() {
-      this.getScan('wDCHbXHrGT4N5KwTfZazwnuMK7G');
+      this.getRequest();
+      setTimeout(() => {
+        //console.log(this.params);
+        this.getScan(this.params);
+      }, 200);
+
     },
     mounted() {
     },
     methods: {
 
+      getRequest() {
+        let url = window.location.search; //获取url中"?"符后的字串
+        this.params = url.substr(1);
+      },
+
       getScan(result) {
         let that = this;
         axios({
-          url: 'http://192.168.1.37:8013/verifyRecord/scan',
+          url: API_URL + '/verifyRecord/scan',
           method: 'post',
           data: {},
           transformRequest: [function () {
@@ -83,13 +97,13 @@
           }
         })
           .then(function (response) {
-            console.log(response.data.data);
+            //console.log(response.data.data);
             if (response.data.success) {
               that.scanInfo = response.data.data;
               that.product = that.scanInfo.product;
               that.src = that.scanInfo.productImages[0].imageUrl;
               that.urls = that.scanInfo.product.productInfo;
-
+              that.thingcodeDetailGuid = that.scanInfo.thingcodeDetailGuid
             } else {
               that.$message({message: '获取数据失败，请检查网络后重试！', type: 'erroy'});
             }
@@ -106,10 +120,9 @@
        * @param params
        */
       toUrl(name, params) {
-        let newQuery = {hash: params};
         this.$router.push({
           name: name,
-          query: newQuery
+          query: params
         })
       },
     }
@@ -173,7 +186,7 @@
       }
     }
     .bottom {
-      width: auto;
+      width: 96%;
       background-color: #FFFFFF;
       margin: 0.5rem 0.5rem 0 0.5rem;
       border-radius: 0.5rem;

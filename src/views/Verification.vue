@@ -23,6 +23,7 @@
 
 <script>
   import axios from 'axios'
+  import {API_URL} from '@/config.js'
   export default {
     data() {
       return {
@@ -30,7 +31,7 @@
       }
     },
     created() {
-      this.getVerifyInfo('407482127261630464');
+      this.getVerifyInfo(this.$route.query.thingcodeDetailGuid);
     },
     mounted() {
     },
@@ -38,7 +39,7 @@
       getVerifyInfo(thingcodeDetailGuid) {
         let that = this;
         axios({
-          url: 'http://192.168.1.37:8013/verifyRecord/getVerifyInfo',
+          url:API_URL + '/verifyRecord/getVerifyInfo',
           method: 'post',
           data: {},
           transformRequest: [function () {
@@ -52,8 +53,8 @@
           }
         })
           .then(function (response) {
-            console.log(response);
-            console.log(response.data);
+           /* console.log(response);
+            console.log(response.data);*/
             if (response.data.success) {
               /*that.businessInfo = response.data.data[0];
               that.urls = that.businessInfo.infos;*/

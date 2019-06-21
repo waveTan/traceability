@@ -8,6 +8,7 @@ import Feedback from './views/Feedback.vue'
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',  //去掉url中的#
   routes: [
     {
       path: '/',
