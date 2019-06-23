@@ -4,8 +4,8 @@
     </el-page-header>
     <div class="info">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <el-form-item label="意见反馈" prop="desc">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+        <el-form-item label="投诉意见" prop="desc">
+          <el-input rows="5" type="textarea" v-model="ruleForm.desc"></el-input>
         </el-form-item>
         <el-form-item class="bt">
           <el-button type="primary" @click="submitForm('ruleForm')">提 交</el-button>

@@ -5,7 +5,7 @@
         <el-image :src="src"></el-image>
       </el-col>
       <el-col :span="24" class="title">
-        <p class="tc">{{product.checkComment==='通过' ? '该商品已被验证，请谨防假冒！':''}}</p>
+        <p class="tc">验证通过，该商品是正品！</p>
         <h3>商品名称: {{product.goodsName}}</h3>
         <h5>商家: {{product.businessName}}</h5>
       </el-col>
@@ -28,7 +28,7 @@
           </li>
           <li @click="toUrl('feedback',{productGuid:product.guid})">
             <i class="ico el-icon-message"></i>
-            <span>意见反馈</span>
+            <span>投诉意见</span>
             <i class="el-icon-arrow-right"></i>
           </li>
         </ul>

@@ -3,7 +3,8 @@
     <el-page-header @back="goBack" content="">
     </el-page-header>
     <div class="info">
-      <ul>
+      <p class="tc" style="padding-top: 2rem">暂无记录</p>
+      <ul v-show="false">
         <li>
           <p>验证时间<span>2019-06-19 09:18:48</span></p>
           <p>验证人<span>非首次验证人</span></p>
